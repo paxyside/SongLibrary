@@ -1,0 +1,15 @@
+{
+  "database" : {
+    "uri" : "postgresql://postgres:pass@localhost:5432/postgres?sslmode=disable"
+  },
+  "server" : {
+    "port" : "8001",
+    "host": ""
+  },
+  "credentials": {
+    "api_key": "VECYgQ6phUZwGsdbr2vJTn43qfmcaAtN"
+  },
+  "external": {
+    "ext_api_url": "https://example.com"
+  }
+}

@@ -1,0 +1,608 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Song library service",
+    "description": "Сервис представляет из себя библиотеку песен",
+    "termsOfService": "http://someurl.oxox",
+    "contact": {
+      "name": "PaxySong",
+      "email": "vhser@yandex.ru"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://en.wikipedia.org/wiki/MIT_License"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8001",
+      "description": " Server-1"
+    }
+  ],
+  "paths": {
+    "/api/songs": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Created song",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Song"
+        ],
+        "summary": "Create a new song",
+        "description": " Create a new song using group and song information",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSongRequest"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v1/songs": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Songs list with pagination",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SongsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Song"
+        ],
+        "summary": "Get list of songs with filtering and pagination",
+        "description": " Retrieve a list of songs with optional filters and pagination",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of songs to return",
+            "required": true,
+            "example": "10",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Number of songs to return"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset for pagination",
+            "required": true,
+            "example": "0",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Offset for pagination"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "Filter by group",
+            "example": "Muse",
+            "schema": {
+              "type": "string",
+              "format": "string",
+              "description": "Filter by group"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/songs/delete/{id}": {
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Song deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid song ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Song"
+        ],
+        "summary": "Delete song by ID",
+        "description": " Delete an existing song by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the song to delete",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the song to delete"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/songs/update/{id}": {
+      "put": {
+        "responses": {
+          "200": {
+            "description": "Song updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Song"
+        ],
+        "summary": "Update song details by ID",
+        "description": " Update the information of an existing song by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the song to update",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the song to update"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Song"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/v1/songs/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Detailed song information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid song ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Song"
+        ],
+        "summary": "Get song details by ID",
+        "description": " Retrieve detailed information about a song by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the song",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the song"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateSongRequest": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "description": "Название группы",
+            "example": "Muse"
+          },
+          "song": {
+            "type": "string",
+            "description": "Название песни",
+            "example": "Supermassive Black Hole"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "400"
+          },
+          "msg": {
+            "type": "string",
+            "example": "Invalid request"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "$ref": "#/components/schemas/Error"
+          }
+        }
+      },
+      "Song": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Song ID",
+            "example": 1
+          },
+          "group": {
+            "type": "string",
+            "description": "Group or band name",
+            "example": "Muse"
+          },
+          "song": {
+            "type": "string",
+            "description": "Song title",
+            "example": "Supermassive Black Hole"
+          },
+          "release_date": {
+            "type": "string",
+            "description": "Song release date",
+            "example": "2006-06-19"
+          },
+          "text": {
+            "type": "string",
+            "description": "Lyrics of the song",
+            "example": "Lyrics of the song"
+          },
+          "link": {
+            "type": "string",
+            "description": "Link to the song",
+            "example": "http://example.com/song"
+          }
+        }
+      },
+      "SongsResponse": {
+        "type": "object",
+        "properties": {
+          "songs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Song ID",
+                  "example": 1
+                },
+                "group": {
+                  "type": "string",
+                  "description": "Group or band name",
+                  "example": "Muse"
+                },
+                "song": {
+                  "type": "string",
+                  "description": "Song title",
+                  "example": "Supermassive Black Hole"
+                },
+                "release_date": {
+                  "type": "string",
+                  "description": "Song release date",
+                  "example": "2006-06-19"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Lyrics of the song",
+                  "example": "Lyrics of the song"
+                },
+                "link": {
+                  "type": "string",
+                  "description": "Link to the song",
+                  "example": "http://example.com/song"
+                }
+              }
+            },
+            "example": [
+              {
+                "group": "Muse",
+                "id": 1,
+                "song": "Supermassive Black Hole"
+              }
+            ]
+          },
+          "total": {
+            "type": "integer",
+            "example": 100
+          }
+        }
+      },
+      "entities.ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "$ref": "#/components/schemas/Error"
+          }
+        }
+      },
+      "entities.Song": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Song ID",
+            "example": 1
+          },
+          "group": {
+            "type": "string",
+            "description": "Group or band name",
+            "example": "Muse"
+          },
+          "song": {
+            "type": "string",
+            "description": "Song title",
+            "example": "Supermassive Black Hole"
+          },
+          "release_date": {
+            "type": "string",
+            "description": "Song release date",
+            "example": "2006-06-19"
+          },
+          "text": {
+            "type": "string",
+            "description": "Lyrics of the song",
+            "example": "Lyrics of the song"
+          },
+          "link": {
+            "type": "string",
+            "description": "Link to the song",
+            "example": "http://example.com/song"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    }
+  },
+  "security": [
+    {
+      "Authorization": [
+        "read",
+        "write"
+      ]
+    }
+  ]
+}

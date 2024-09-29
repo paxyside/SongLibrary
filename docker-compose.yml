@@ -1,0 +1,40 @@
+version: '2.4'
+
+services:
+  song:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    container_name: "song"
+    ports:
+      - "8001:8001"
+    networks:
+      song_network:
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+
+  database:
+    hostname: postgres
+    image: postgres:15.5
+    environment:
+      - TZ=UTC
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=postgres
+    networks:
+      song_network:
+    volumes:
+      - song_volume:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+    restart: unless-stopped
+
+networks:
+  song_network:
+    external: true
+
+volumes:
+  song_volume:
