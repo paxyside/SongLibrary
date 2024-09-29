@@ -3,6 +3,7 @@
     "uri" : "postgresql://postgres:pass@localhost:5432/postgres?sslmode=disable"
   },
   "server" : {
+    "server_url": "http://localhost:8001",
     "port" : "8001",
     "host": ""
   },
