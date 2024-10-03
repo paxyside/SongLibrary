@@ -85,8 +85,5 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-# golang binary
-server
-
 # http private config
 http/http-client-example.env.json
